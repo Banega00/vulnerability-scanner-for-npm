@@ -10,6 +10,10 @@ type CommandOptions = {
     severity?: keyof typeof severityLevels;
 }
 
+function green(text: string | number){
+    return `\x1b[32m${text}\x1b[0m`;
+}
+
 function bold(text: string | number){
     return `\x1b[1m${text}\x1b[0m`;
 }
@@ -197,14 +201,25 @@ async function vulnerabilityCheck(options:{
                 console.log('----------------------------------')
             }
         }
+        
+        if(length === 0){
+            console.log(green(`No vulnerabilities found ✅`));
+        }
 
         console.log("___________________________________________________")
         console.log("REPORT DONE")
+
+        if(length == 0){
+            process.exit(0);
+        }else{
+            process.exit(1);
+        }
 
     } catch (error){
         if(error instanceof Error){
             console.log(error.message);
         }
+        process.exit(1);
         return;
     }
 }
